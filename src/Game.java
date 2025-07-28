@@ -18,6 +18,9 @@ public class Game {
    public static boolean BouncyGameLeftPressed = false;
    public static boolean BouncyGameRightPressed = false;
    public static boolean mousePressed = false;
+   public boolean isKeyCPressed = false;
+   public boolean isKeySPressed = false;
+   private boolean exitActive = false;
 
 // ----------------------------------------------------
    
@@ -56,12 +59,22 @@ public class Game {
                   setBouncyGameJumpPressed(true);
                }
             }
+            if (e.getKeyCode() == KeyEvent.VK_C) {
+               isKeyCPressed = true;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_S) {
+               isKeySPressed = true;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+               exitActive = true;
+            }
          }
          public void keyReleased(KeyEvent e) {}
       };
       cn.getTextWindow().addKeyListener(klis);
       // ----------------------------------------------------
    }
+
    public void clear() {
       cn.getTextWindow().setCursorPosition(0,0);
       for (int i = 0; i < cn.getTextWindow().getRows() - 1; i++) {
@@ -121,4 +134,12 @@ public class Game {
    public static void setMousePressed(boolean mousePressed) {
       Game.mousePressed = mousePressed;
    }
+
+    public boolean isExitActive() {
+        return exitActive;
+    }
+
+    public void setExitActive(boolean exitActive) {
+        this.exitActive = exitActive;
+    }
 }
