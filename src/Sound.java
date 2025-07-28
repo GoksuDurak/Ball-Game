@@ -25,27 +25,9 @@ public class Sound {
             e.printStackTrace();
         }
     }
-    public void jumpSound() {
-        File soundFile = new File("jump.wav");
-        try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
-            clipJump = AudioSystem.getClip();
-            clipJump.open(ais);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-        Thread t1 = new Thread(() -> {
-            clipJump.start();
-        });
-        t1.start();
-        try {
-            t1.join();   // t2 bitene kadar bekle
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void exitSound() {
-        File soundFileExit = new File("blipSelect.wav");
+
+    public void playSound(String fileName) {
+        File soundFileExit = new File(fileName +".wav");
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundFileExit);
             clipExit = AudioSystem.getClip();
@@ -63,6 +45,7 @@ public class Sound {
             throw new RuntimeException(e);
         }
     }
+
     public void start() throws JavaLayerException, InterruptedException {
 
     }

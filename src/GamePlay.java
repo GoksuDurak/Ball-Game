@@ -5,7 +5,9 @@ public class GamePlay {
     }
     public void start() {
         Sound sound = new Sound(game);
-        BouncyGame bouncyGame = new BouncyGame(21,31,game,sound);
-        bouncyGame.start();
+        Menu menu = new Menu(game,sound);
+        menu.interfaceInformation();
+        sound.playSound("exit");
+        System.exit(0);
     }
 }

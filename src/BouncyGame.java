@@ -38,18 +38,31 @@ public class BouncyGame {
                     }
                 }
             }
+            int spikeCount = 0;
+            int indexCol = 0;
+            int randomDeleteRodCount = 0;
+            int randomRow = 0;
             if (i != 0 && i != rows - 1 && i % 2 == 0) {
-                int randomDeleteRodCount = 0;
-                int randomRow = 0;
+                do {
+                    spikeCount = (int) (Math.random() * cols / 6) + (cols / 3);
+                } while (spikeCount == 30);
+                spikeCount /= 4;
+                for (int j = 0; j < spikeCount; j++) {
+                    do {
+                        indexCol = (int) (Math.random() * cols);
+                    } while (board[i - 1][indexCol] != ' ');
+                    board[i - 1][indexCol] = '˄';
+                }
 
                 do {
-                    randomDeleteRodCount = (int) (Math.random() * cols / 3) + (2 * cols / 3);
-                } while (randomDeleteRodCount == 30);
+                    randomDeleteRodCount = (int) (Math.random() * cols / 6) + (cols / 3);
+                    randomDeleteRodCount /= 4;
+                } while (randomDeleteRodCount > spikeCount);
 
                 for (int j = 0; j < randomDeleteRodCount; j++) {
                     do {
                         randomRow = (int) (Math.random() * cols);
-                    } while (board[i][randomRow] == ' ' || randomRow == cols - 1 || randomRow == 0);
+                    } while (board[i][randomRow] == ' ' || randomRow == cols - 1 || randomRow == 0 || board[i - 1][randomRow] == '˄');
                     board[i][randomRow] = ' ';
                 }
             }
@@ -103,7 +116,7 @@ public class BouncyGame {
             move();
             jump();
             if (isStageClear) {
-                sound.exitSound();
+                sound.playSound("exit");
                 isStageClear = false;
                 stage++;
                 setBoard();
@@ -128,17 +141,21 @@ public class BouncyGame {
 
     public void mouse() {
         if (Game.isMousePressed()) {
-            if ((game.getMousex() < cols - 2 || game.getMousex() > 0) && (game.getMousey() < rows - 2 || game.getMousey() > 0)) {
+            if ((game.getMousex() < cols - 2 && game.getMousex() > 0) && (game.getMousey() < rows - 2 && game.getMousey() > 0)) {
                 if (game.getMousex() % 2 == 0 && game.getMousey() % 2 == 1) {
                     if (verticalRodCount > 0) {
-                        board[game.getMousey()][game.getMousex()] = '|';
-                        verticalRodCount--;
+                        if (board[game.getMousey()][game.getMousex()] == ' ') {
+                            board[game.getMousey()][game.getMousex()] = '|';
+                            verticalRodCount--;
+                        }
                     }
                 }
                 if (game.getMousex() % 2 == 1 && game.getMousey() % 2 == 0) {
                     if (horizontalRodCount > 0) {
-                        board[game.getMousey()][game.getMousex()] = '-';
-                        horizontalRodCount--;
+                        if (board[game.getMousey()][game.getMousex()] == ' ') {
+                            board[game.getMousey()][game.getMousex()] = '-';
+                            horizontalRodCount--;
+                        }
                     }
                 }
             }
@@ -150,7 +167,7 @@ public class BouncyGame {
         if (Game.isBouncyGameJumpPressed()) {
             if (board[ballY + 1][ballX] == '-' || board[ballY + 1][ballX] == '|') {
                 // sesi aç
-                sound.jumpSound();
+                sound.playSound("jump");
                 isJumpActive = true;
             }
             Game.setBouncyGameJumpPressed(false);
